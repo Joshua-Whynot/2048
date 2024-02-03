@@ -23,7 +23,7 @@ function setupInput() {
     }, false);
     window.addEventListener("touchmove", e => {
         e.preventDefault();
-    }, false);
+    }, { passive: false });
     window.addEventListener("touchend", handleSwipe, false);
 }
 
