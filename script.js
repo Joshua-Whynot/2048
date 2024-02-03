@@ -9,10 +9,43 @@ const grid = new Grid(gameBoard)
 grid.randomEmptyCell().tile = new Tile(gameBoard)
 grid.randomEmptyCell().tile = new Tile(gameBoard)
 setupInput();
+let touchStartX = 0;
+let touchStartY = 0;
+let touchEndX = 0;
+let touchEndY = 0;
 
 
 function setupInput() {
-    window.addEventListener("keydown", handleInput, { once: true })
+    window.addEventListener("keydown", handleInput, { once: true });
+    window.addEventListener("touchstart", e => {
+        touchStartX = e.touches[0].clientX;
+        touchStartY = e.touches[0].clientY;
+    }, false);
+    window.addEventListener("touchmove", e => {
+        e.preventDefault();
+    }, false);
+    window.addEventListener("touchend", handleSwipe, false);
+}
+
+async function handleSwipe(e) {
+    touchEndX = e.changedTouches[0].clientX;
+    touchEndY = e.changedTouches[0].clientY;
+    let deltaX = touchEndX - touchStartX;
+    let deltaY = touchEndY - touchStartY;
+
+    if (Math.abs(deltaX) > Math.abs(deltaY)) { // Horizontal swipe
+        if (deltaX > 0) {
+            await handleInput({ key: "ArrowRight" });
+        } else {
+            await handleInput({ key: "ArrowLeft" });
+        }
+    } else { // Vertical swipe
+        if (deltaY > 0) {
+            await handleInput({ key: "ArrowDown" });
+        } else {
+            await handleInput({ key: "ArrowUp" });
+        }
+    }
 }
 
 async function handleInput(e) {
