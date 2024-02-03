@@ -51,6 +51,8 @@ async function handleSwipe(e) {
 async function handleInput(e) {
     switch (e.key) {
         case "ArrowUp":
+        case "w":
+        case "W":
             if (!canMoveUp()) {
                 setupInput()
                 return
@@ -58,6 +60,8 @@ async function handleInput(e) {
             await moveUp()
             break
         case "ArrowDown":
+        case "s":
+        case "S":
             if (!canMoveDown()) {
                 setupInput()
                 return
@@ -65,6 +69,8 @@ async function handleInput(e) {
             await moveDown()
             break
         case "ArrowLeft":
+        case "a":
+        case "A":
             if (!canMoveLeft()) {
                 setupInput()
                 return
@@ -72,6 +78,8 @@ async function handleInput(e) {
             await moveLeft()
             break
         case "ArrowRight":
+        case "d":
+        case "D":
             if (!canMoveRight()) {
                 setupInput()
                 return
