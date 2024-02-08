@@ -13,7 +13,7 @@ let touchStartX = 0;
 let touchStartY = 0;
 let touchEndX = 0;
 let touchEndY = 0;
-
+document.getElementById('reset-button').addEventListener('click', resetGame); //reset button setup
 
 function setupInput() {
     window.addEventListener("keydown", handleInput, { once: true });
@@ -25,6 +25,32 @@ function setupInput() {
         e.preventDefault();
     }, { passive: false });
     window.addEventListener("touchend", handleSwipe, false);
+}
+function showResetButton() {
+    const resetButton = document.getElementById('reset-button');
+    resetButton.style.display = 'block';
+}
+
+function resetGame() {
+    //get tiles
+    let cellsWithTiles = null
+    cellsWithTiles = getCellsWithTiles(grid.cellsByColumn)
+    console.log(cellsWithTiles)
+    console.log('reset pressed')
+    //remove tiles from cells
+    cellsWithTiles.forEach(cell => {
+        cell.tile.remove()
+        cell.tile = null
+    })
+    //add two tiles
+    let emptyCell = grid.randomEmptyCell();
+    if (emptyCell) {
+        emptyCell.tile = new Tile(gameBoard);
+    }
+    emptyCell = grid.randomEmptyCell();
+    if (emptyCell) {
+        emptyCell.tile = new Tile(gameBoard);
+    }
 }
 
 async function handleSwipe(e) {
@@ -98,7 +124,7 @@ async function handleInput(e) {
 
     if (!canMoveUp() && !canMoveDown() && !canMoveLeft() && !canMoveRight()) {
         newTile.waitForTransition(true).then(() => {
-            alert("You lose")
+            showResetButton()
         })
         return
     }
@@ -120,6 +146,12 @@ function moveLeft() {
 
 function moveRight() {
     return slideTiles(grid.cellsByRow.map(row => [...row].reverse()))
+}
+
+function getCellsWithTiles(cells) {
+    return cells.flatMap(group => {
+        return group.filter(cell => cell.tile != null)
+    })
 }
 
 function slideTiles(cells) {

@@ -12,6 +12,18 @@ body {
     font-size: 7.5vmin;
 }
 
+#reset-button {
+    position: fixed;
+    top: 10px; 
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 9999;
+    background-color: #FFF; 
+    color: #000; 
+    padding: 10px 20px; 
+    border-radius: 5px; 
+}
+
 #game-board {
     display: grid;
     grid-template-columns: repeat(var(--grid-size), var(--cell-size));
