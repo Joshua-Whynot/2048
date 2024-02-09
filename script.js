@@ -9,11 +9,13 @@ const grid = new Grid(gameBoard)
 grid.randomEmptyCell().tile = new Tile(gameBoard)
 grid.randomEmptyCell().tile = new Tile(gameBoard)
 setupInput();
+let score = 0;
 let touchStartX = 0;
 let touchStartY = 0;
 let touchEndX = 0;
 let touchEndY = 0;
-document.getElementById('reset-button').addEventListener('click', resetGame); //reset button setup
+document.getElementById('reset-button').addEventListener('click', resetGame); //reset buttons setup
+document.getElementById('popup-button').addEventListener('click', resetGame);
 
 function setupInput() {
     window.addEventListener("keydown", handleInput, { once: true });
@@ -26,12 +28,20 @@ function setupInput() {
     }, { passive: false });
     window.addEventListener("touchend", handleSwipe, false);
 }
-function showResetButton() {
-    const resetButton = document.getElementById('reset-button');
-    resetButton.style.display = 'block';
+function gameOver() { 
+    const gameOverPopup = document.getElementById('game-over-popup');
+    gameOverPopup.style.display = 'block';
+}
+function updateScoreDisplay() {
+    const scoreDisplay = document.getElementById('score-display-popup');
+    scoreDisplay.textContent = score;
 }
 
 function resetGame() {
+    //reset score
+    score = 0;
+    updateScoreDisplay();
+
     //get tiles
     let cellsWithTiles = null
     cellsWithTiles = getCellsWithTiles(grid.cellsByColumn)
@@ -51,6 +61,10 @@ function resetGame() {
     if (emptyCell) {
         emptyCell.tile = new Tile(gameBoard);
     }
+    //hide popup
+    const gameOverPopup = document.getElementById('game-over-popup');
+    gameOverPopup.style.display = 'none';
+    setupInput();
 }
 
 async function handleSwipe(e) {
@@ -124,7 +138,8 @@ async function handleInput(e) {
 
     if (!canMoveUp() && !canMoveDown() && !canMoveLeft() && !canMoveRight()) {
         newTile.waitForTransition(true).then(() => {
-            showResetButton()
+            updateScoreDisplay();
+            gameOver()
         })
         return
     }
@@ -171,6 +186,8 @@ function slideTiles(cells) {
                     promises.push(cell.tile.waitForTransition())
                     if (lastValidCell.tile != null) {
                         lastValidCell.mergeTile = cell.tile
+                        score += cell.tile.value * 2; // Increment score with the merged tiles' values
+                        console.log(score);
                     } else {
                         lastValidCell.tile = cell.tile
                     }

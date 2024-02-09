@@ -2,6 +2,7 @@
     box-sizing: border-box;
     font-family: Arial;
 }
+
 body {
     background-color: #333;
     display: flex;
@@ -10,6 +11,32 @@ body {
     height: 100vh;
     margin: 0;
     font-size: 7.5vmin;
+}
+
+#game-over-popup {
+    display: none; 
+    position: fixed; 
+    top: 40%; 
+    left: 50%; 
+    transform: translate(-50%, -50%); 
+    z-index: 9999; 
+    padding: 5px;
+    text-align: center;
+    border-radius: 20px;
+    width: 25vw;
+    height: 25vw;
+    background-color: rgba(0, 0, 0, 0.7);
+    animation: popin 1000ms ease-in-out;
+    color: red;
+    font-size: 2vw;
+}
+#game-over-popup button{
+    width: 20vw;
+    height: 5vw;
+    font-size: 2vw;
+    color: green;
+    font-weight: bold;
+    border-radius: 10px;
 }
 
 #reset-button {
@@ -58,7 +85,13 @@ body {
     animation: show 200ms ease-in-out;
     transition: 100ms ease-in-out;
 }
+@keyframes popin{
+    0%{
+        opacity: 0;
+        transform: scale(0);
+    }
 
+}
 @keyframes show{
     0%{
         opacity: .5;
